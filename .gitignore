@@ -13,6 +13,7 @@
 *.dylib
 
 # Test binary, built with `go test -c`
+_test.go
 *.test
 
 # Output of the go coverage tool, specifically when used with LiteIDE
@@ -23,3 +24,9 @@
 # go.mod
 # go.sum
 vendor/
+
+# local config files
+configs/pro/*
+configs/dev/*
+configs/config-all.yaml
+configs/config-release.yaml

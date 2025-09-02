@@ -1,0 +1,42 @@
+package orm
+
+import (
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+	"myblog-server-go/config/orm"
+	"myblog-server-go/global"
+	"myblog-server-go/initialize/internal"
+)
+
+// @Title        pgsql.go
+// @Description
+// @Create       kurous 2025-08-18 10:28
+
+func GormPgSql() *gorm.DB {
+	p := global.BlogConfig.Pgsql
+	return initPgSqlDatabase(p)
+}
+
+// GormPgSqlByConfig 初始化 Postgresql 数据库 通过指定参数
+func GormPgSqlByConfig(p orm.Pgsql) *gorm.DB {
+	return initPgSqlDatabase(p)
+}
+
+// initPgSqlDatabase 初始化 Postgresql 数据库的辅助函数
+func initPgSqlDatabase(p orm.Pgsql) *gorm.DB {
+	if p.Dbname == "" {
+		return nil
+	}
+	pgsqlConfig := postgres.Config{
+		DSN:                  p.Dsn(), // DSN data source name
+		PreferSimpleProtocol: false,
+	}
+	if db, err := gorm.Open(postgres.New(pgsqlConfig), internal.Gorm.Config(p.Prefix, p.Singular)); err != nil {
+		panic(err)
+	} else {
+		sqlDB, _ := db.DB()
+		sqlDB.SetMaxIdleConns(p.MaxIdleConns)
+		sqlDB.SetMaxOpenConns(p.MaxOpenConns)
+		return db
+	}
+}
