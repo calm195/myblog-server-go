@@ -1,7 +1,6 @@
 package global
 
 import (
-	"myblog-server-go/util/timer"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -26,9 +25,8 @@ var (
 	BlogMongo              *qmgo.QmgoClient
 	BlogConfig             config.Server
 	BlogVp                 *viper.Viper
-	BlogLog                *zap.Logger
-	BlogTimer              timer.Timer = timer.NewTimerTask()
-	BlogConcurrencyControl             = &singleflight.Group{}
+	BlogLog                *zap.SugaredLogger
+	BlogConcurrencyControl = &singleflight.Group{}
 	BlogRouters            gin.RoutesInfo
 	BlogActiveDbname       *string
 	BlackCache             local_cache.Cache

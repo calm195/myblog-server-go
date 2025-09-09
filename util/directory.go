@@ -11,8 +11,10 @@ import (
 	"go.uber.org/zap"
 )
 
-// PathExists 判断路径是否存在 by os.Stat FileInfo.IsDir
+// PathExists 判断路径是否存在 by os.Stat 工作目录下的路径
 func PathExists(path string) (bool, error) {
+	workDir, _ := os.Getwd()
+	path = filepath.Join(workDir, path)
 	fi, err := os.Stat(path)
 	if err == nil {
 		if fi.IsDir() {

@@ -1,7 +1,6 @@
 package initialize
 
 import (
-	"github.com/qiniu/qmgo/middleware"
 	"myblog-server-go/global"
 	"myblog-server-go/router"
 	"net/http"
@@ -31,16 +30,17 @@ func (fs justFilesFilesystem) Open(name string) (http.File, error) {
 // 初始化总路由
 
 func Routers() *gin.Engine {
+	global.BlogLog.Info("router register start...")
 	Router := gin.New()
+	global.BlogLog.Info("current gin mode: " + gin.Mode())
 	Router.Use(gin.Recovery())
 	if gin.Mode() == gin.DebugMode {
 		Router.Use(gin.Logger())
 	}
 
-	systemRouter := router.RouterGroupApp.System
-	exampleRouter := router.RouterGroupApp.Example
+	systemRouter := router.GroupApp.SystemRouterGroup
 
-	Router.StaticFS(global.BlogConfig.Local.StorePath, justFilesFilesystem{http.Dir(global.GVA_CONFIG.Local.StorePath)}) // Router.Use(middleware.LoadTls())  // 如果需要使用https 请打开此中间件 然后前往 core/server.go 将启动模式 更变为 Router.RunTLS("端口","你的cre/pem文件","你的key文件")
+	// Router.StaticFS(global.BlogConfig.Local.StorePath, justFilesFilesystem{http.Dir(global.GVA_CONFIG.Local.StorePath)}) // Router.Use(middleware.LoadTls())  // 如果需要使用https 请打开此中间件 然后前往 core/server.go 将启动模式 更变为 Router.RunTLS("端口","你的cre/pem文件","你的key文件")
 	// 跨域，如需跨域可以打开下面的注释
 	// Router.Use(middleware.Cors()) // 直接放行全部跨域请求
 	// Router.Use(middleware.CorsByRules()) // 按照配置的规则放行跨域请求
@@ -48,10 +48,10 @@ func Routers() *gin.Engine {
 
 	// 方便统一添加路由组前缀 多服务器上线使用
 
-	PublicGroup := Router.Group(global.GVA_CONFIG.System.RouterPrefix)
-	PrivateGroup := Router.Group(global.GVA_CONFIG.System.RouterPrefix)
+	PublicGroup := Router.Group(global.BlogConfig.System.RouterPrefix)
+	PrivateGroup := Router.Group(global.BlogConfig.System.RouterPrefix)
 
-	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
+	//PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 
 	{
 		// 健康监测
@@ -60,41 +60,32 @@ func Routers() *gin.Engine {
 		})
 	}
 	{
-		systemRouter.InitBaseRouter(PublicGroup) // 注册基础功能路由 不做鉴权
-		systemRouter.InitInitRouter(PublicGroup) // 自动初始化相关
+		systemRouter.InitVisitRouter(PublicGroup) // 注册基础功能路由 不做鉴权
+		//systemRouter.InitInitRouter(PublicGroup) // 自动初始化相关
 	}
-
-	{
-		systemRouter.InitApiRouter(PrivateGroup, PublicGroup)               // 注册功能api路由
-		systemRouter.InitJwtRouter(PrivateGroup)                            // jwt相关路由
-		systemRouter.InitUserRouter(PrivateGroup)                           // 注册用户路由
-		systemRouter.InitMenuRouter(PrivateGroup)                           // 注册menu路由
-		systemRouter.InitSystemRouter(PrivateGroup)                         // system相关路由
-		systemRouter.InitSysVersionRouter(PrivateGroup)                     // 发版相关路由
-		systemRouter.InitCasbinRouter(PrivateGroup)                         // 权限相关路由
-		systemRouter.InitAutoCodeRouter(PrivateGroup, PublicGroup)          // 创建自动化代码
-		systemRouter.InitAuthorityRouter(PrivateGroup)                      // 注册角色路由
-		systemRouter.InitSysDictionaryRouter(PrivateGroup)                  // 字典管理
-		systemRouter.InitAutoCodeHistoryRouter(PrivateGroup)                // 自动化代码历史
-		systemRouter.InitSysOperationRecordRouter(PrivateGroup)             // 操作记录
-		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup)            // 字典详情管理
-		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)             // 按钮权限管理
-		systemRouter.InitSysExportTemplateRouter(PrivateGroup, PublicGroup) // 导出模板
-		systemRouter.InitSysParamsRouter(PrivateGroup, PublicGroup)         // 参数管理
-		exampleRouter.InitCustomerRouter(PrivateGroup)                      // 客户路由
-		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)         // 文件上传下载功能路由
-		exampleRouter.InitAttachmentCategoryRouterRouter(PrivateGroup)      // 文件上传下载分类
-
-	}
-
-	//插件路由安装
-	InstallPlugin(PrivateGroup, PublicGroup, Router)
 
 	// 注册业务路由
 	initBizRouter(PrivateGroup, PublicGroup)
 
-	global.GVA_ROUTERS = Router.Routes()
+	global.BlogRouters = Router.Routes()
 
-	global.GVA_LOG.Info("router register success")
+	for _, r := range global.BlogRouters {
+		global.BlogLog.Infof("route: method=%s, path=%s, handler=%s", r.Method, r.Path, r.Handler)
+	}
+
+	global.BlogLog.Info("router register success")
 	return Router
+}
+
+// 占位方法，保证文件可以正确加载，避免go空变量检测报错，请勿删除。
+func holder(routers ...*gin.RouterGroup) {
+	_ = routers
+	_ = router.GroupApp
+}
+
+func initBizRouter(routers ...*gin.RouterGroup) {
+	privateGroup := routers[0]
+	publicGroup := routers[1]
+
+	holder(publicGroup, privateGroup)
 }

@@ -1,7 +1,6 @@
 package util
 
 import (
-	"go.uber.org/zap"
 	"myblog-server-go/global"
 	"myblog-server-go/initialize/orm"
 )
@@ -12,7 +11,7 @@ func Reload() error {
 
 	// 重新加载配置文件
 	if err := global.BlogVp.ReadInConfig(); err != nil {
-		global.BlogLog.Error("重新读取配置文件失败!", zap.Error(err))
+		global.BlogLog.Errorf("重新读取配置文件失败!: %s", err.Error())
 		return err
 	}
 
@@ -21,7 +20,7 @@ func Reload() error {
 		db, _ := global.BlogDb.DB()
 		err := db.Close()
 		if err != nil {
-			global.BlogLog.Error("关闭原数据库连接失败!", zap.Error(err))
+			global.BlogLog.Errorf("关闭原数据库连接失败!: %s", err.Error())
 			return err
 		}
 	}

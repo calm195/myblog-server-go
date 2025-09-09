@@ -1,11 +1,12 @@
 package internal
 
 import (
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"myblog-server-go/global"
 	"os"
 	"time"
+
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 // ZapCore

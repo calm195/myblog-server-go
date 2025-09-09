@@ -2,9 +2,10 @@ package internal
 
 import (
 	"fmt"
-	"gorm.io/gorm/logger"
 	"myblog-server-go/config/orm"
 	"myblog-server-go/global"
+
+	"gorm.io/gorm/logger"
 )
 
 type Writer struct {

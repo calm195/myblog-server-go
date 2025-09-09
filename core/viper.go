@@ -3,11 +3,12 @@ package core
 import (
 	"flag"
 	"fmt"
-	"github.com/fsnotify/fsnotify"
-	"github.com/spf13/viper"
 	"myblog-server-go/core/internal"
 	"myblog-server-go/global"
 	"os"
+
+	"github.com/fsnotify/fsnotify"
+	"github.com/spf13/viper"
 )
 
 // Viper
@@ -46,7 +47,7 @@ func Viper() *viper.Viper {
 func getConfigPath() (config string) {
 	// `-c` flag parse
 	release := "null"
-	flag.StringVar(&release, "p", "release", "choose config file.")
+	flag.StringVar(&release, "p", "", "choose config file.")
 	flag.Parse()
 	if release == "release" { // 发布模式
 		config = internal.ConfigReleaseFile

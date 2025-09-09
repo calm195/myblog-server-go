@@ -1,8 +1,9 @@
 package config
 
 import (
-	"go.uber.org/zap/zapcore"
 	"time"
+
+	"go.uber.org/zap/zapcore"
 )
 
 // Zap
@@ -37,6 +38,11 @@ func (c *Zap) Levels() []zapcore.Level {
 	return levels
 }
 
+// Encoder
+//
+//	@Description: 根据配置文件中的 Format 字段，返回相应的 zapcore.Encoder。如果 Format 为 "json"，则返回 JSON 编码器；否则返回控制台编码器
+//	@receiver c
+//	@return zapcore.Encoder
 func (c *Zap) Encoder() zapcore.Encoder {
 	config := zapcore.EncoderConfig{
 		TimeKey:       "timer",
@@ -51,25 +57,29 @@ func (c *Zap) Encoder() zapcore.Encoder {
 		},
 		EncodeLevel:    c.LevelEncoder(),
 		EncodeCaller:   zapcore.FullCallerEncoder,
-		EncodeDuration: zapcore.SecondsDurationEncoder,
+		EncodeDuration: zapcore.MillisDurationEncoder,
 	}
+
 	if c.Format == "json" {
 		return zapcore.NewJSONEncoder(config)
 	}
 	return zapcore.NewConsoleEncoder(config)
-
 }
 
-// LevelEncoder 根据 EncodeLevel 返回 zapcore.LevelEncoder
+// LevelEncoder
+//
+//	@Description: 根据 EncodeLevel 返回 zapcore.LevelEncoder
+//	@receiver c
+//	@return zapcore.LevelEncoder
 func (c *Zap) LevelEncoder() zapcore.LevelEncoder {
-	switch {
-	case c.EncodeLevel == "LowercaseLevelEncoder": // 小写编码器(默认)
+	switch c.EncodeLevel {
+	case "LowercaseLevelEncoder": // 小写编码器(默认)
 		return zapcore.LowercaseLevelEncoder
-	case c.EncodeLevel == "LowercaseColorLevelEncoder": // 小写编码器带颜色
+	case "LowercaseColorLevelEncoder": // 小写编码器带颜色
 		return zapcore.LowercaseColorLevelEncoder
-	case c.EncodeLevel == "CapitalLevelEncoder": // 大写编码器
+	case "CapitalLevelEncoder": // 大写编码器
 		return zapcore.CapitalLevelEncoder
-	case c.EncodeLevel == "CapitalColorLevelEncoder": // 大写编码器带颜色
+	case "CapitalColorLevelEncoder": // 大写编码器带颜色
 		return zapcore.CapitalColorLevelEncoder
 	default:
 		return zapcore.LowercaseLevelEncoder

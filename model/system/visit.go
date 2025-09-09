@@ -2,7 +2,7 @@ package system
 
 import "myblog-server-go/global"
 
-// @Title        visit.go
+// @Title        enter.go
 // @Description
 // @Create       kurous 2025-08-17 15:36
 

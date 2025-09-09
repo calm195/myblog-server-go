@@ -1,11 +1,12 @@
 package orm
 
 import (
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"myblog-server-go/config/orm"
 	"myblog-server-go/global"
 	"myblog-server-go/initialize/internal"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 // @Title        mysql.go
@@ -27,6 +28,7 @@ func initGormMysql(mc orm.Mysql) *gorm.DB {
 		DefaultStringSize:         191,      // string 类型字段的默认长度
 		SkipInitializeWithVersion: false,    // 根据版本自动配置
 	}
+	global.BlogLog.Infof("mysql config %v", mysqlConfig)
 
 	if db, err := gorm.Open(mysql.New(mysqlConfig), internal.Gorm.Config(mc.Prefix, mc.Singular)); err != nil {
 		panic(err)
@@ -35,6 +37,7 @@ func initGormMysql(mc orm.Mysql) *gorm.DB {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(mc.MaxIdleConnections)
 		sqlDB.SetMaxOpenConns(mc.MaxOpenConnections)
+		global.BlogLog.Infof("mysql connect success, database url: %s, dbname: %s", mc.Path, mc.Dbname)
 		return db
 	}
 }

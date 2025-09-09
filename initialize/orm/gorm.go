@@ -1,12 +1,12 @@
 package orm
 
 import (
-	"go.uber.org/zap"
-	"gorm.io/gorm"
 	"myblog-server-go/global"
 	"myblog-server-go/model/post"
 	"myblog-server-go/model/system"
 	"os"
+
+	"gorm.io/gorm"
 )
 
 // @Title        gorm.go
@@ -14,7 +14,17 @@ import (
 // @Create       kurous 2025-08-18 10:31
 
 func Gorm() *gorm.DB {
-	switch global.BlogConfig.System.DbType {
+	currentDbType := global.BlogConfig.System.DbType
+	if currentDbType == "" {
+		global.BlogConfig.System.DbType = "mysql"
+		currentDbType = "mysql"
+	}
+	global.BlogLog.Infof("current db type: %s", currentDbType)
+
+	// 连接数据库
+	// 目前支持 mysql 和 pgsql
+	// 默认 mysql
+	switch currentDbType {
 	case "mysql":
 		global.BlogActiveDbname = &global.BlogConfig.Mysql.Dbname
 		return GormMysql()
@@ -36,9 +46,9 @@ func RegisterTables() {
 		post.PostCategory{},
 	)
 	if err != nil {
-		global.BlogLog.Error("register table failed", zap.Error(err))
+		global.BlogLog.Errorf("register table failed: %s", err.Error())
 		os.Exit(0)
 	}
 
-	global.BlogLog.Info("register table success")
+	global.BlogLog.Infof("register tables success")
 }

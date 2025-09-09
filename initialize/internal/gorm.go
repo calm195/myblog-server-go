@@ -1,12 +1,13 @@
 package internal
 
 import (
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
-	"gorm.io/gorm/schema"
 	"myblog-server-go/config/orm"
 	"myblog-server-go/global"
 	"time"
+
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 var Gorm = new(_gorm)

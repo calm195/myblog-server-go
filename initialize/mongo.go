@@ -3,15 +3,16 @@ package initialize
 import (
 	"context"
 	"fmt"
+	"myblog-server-go/global"
+	"myblog-server-go/initialize/internal"
+	"sort"
+	"strings"
+
 	"github.com/pkg/errors"
 	"github.com/qiniu/qmgo"
 	"github.com/qiniu/qmgo/options"
 	"go.mongodb.org/mongo-driver/bson"
 	option "go.mongodb.org/mongo-driver/mongo/options"
-	"myblog-server-go/global"
-	"myblog-server-go/initialize/internal"
-	"sort"
-	"strings"
 )
 
 var Mongo = new(mongo)

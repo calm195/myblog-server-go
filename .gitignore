@@ -23,10 +23,12 @@ _test.go
 # 如果使用go vendor 进行构建代码
 # go.mod
 # go.sum
-vendor/
+vendor
 
 # local config files
 configs/pro/*
 configs/dev/*
 configs/config-all.yaml
 configs/config-release.yaml
+
+log

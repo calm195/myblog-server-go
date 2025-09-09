@@ -1,11 +1,12 @@
 package orm
 
 import (
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"myblog-server-go/config/orm"
 	"myblog-server-go/global"
 	"myblog-server-go/initialize/internal"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 // @Title        pgsql.go
@@ -35,8 +36,8 @@ func initPgSqlDatabase(p orm.Pgsql) *gorm.DB {
 		panic(err)
 	} else {
 		sqlDB, _ := db.DB()
-		sqlDB.SetMaxIdleConns(p.MaxIdleConns)
-		sqlDB.SetMaxOpenConns(p.MaxOpenConns)
+		sqlDB.SetMaxIdleConns(p.MaxIdleConnections)
+		sqlDB.SetMaxOpenConns(p.MaxOpenConnections)
 		return db
 	}
 }

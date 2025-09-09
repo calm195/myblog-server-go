@@ -14,20 +14,20 @@
 
 ## 项目结构
 
-| 文件夹          | 说明            | 描述                                                |
-|--------------|---------------|---------------------------------------------------|
-| `api`        | api层          | api层                                              |
-| `config`     | 配置包           | config.yaml对应的配置结构体                               |
-| `configs`    | 配置包           | config*.yaml所在位置                                  |
-| `core`       | 核心文件          | 核心组件(zap, viper, server)的初始化                      |
-| `global`     | 全局对象          | 全局对象                                              |
-| `initialize` | 初始化           | router,redisClient,gorm,validator, timer的初始化      |
-| `middleware` | 中间件层          | 用于存放 `gin` 中间件代码                                  |
-| `model`      | 模型层           | 模型对应数据表                                           |
-| `packfile`   | 静态文件打包        | 静态文件打包                                            |
-| `resource`   | 静态资源文件夹       | 负责存放静态文件                                          |
-| `router`     | 路由层           | 路由层                                               |
-| `service`    | service层      | 存放业务逻辑问题                                          |
-| `source`     | source层       | 存放初始化数据的函数                                        |
-| `util`       | 工具包           | 工具函数封装                                            |
+| 文件夹          | 说明       | 描述                                           |
+|--------------|----------|----------------------------------------------|
+| `api`        | api层     | api层                                         |
+| `config`     | 配置包      | config.yaml对应的配置结构体                          |
+| `configs`    | 配置包      | config*.yaml所在位置                             |
+| `core`       | 核心文件     | 核心组件(zap, viper, server)的初始化                 |
+| `global`     | 全局对象     | 全局对象                                         |
+| `initialize` | 初始化      | router,redisClient,gorm,validator, timer的初始化 |
+| `middleware` | 中间件层     | 用于存放 `gin` 中间件代码                             |
+| `model`      | 模型层      | 模型对应数据表                                      |
+| `packfile`   | 静态文件打包   | 静态文件打包                                       |
+| `resource`   | 静态资源文件夹  | 负责存放静态文件                                     |
+| `router`     | 路由层      | 路由层                                          |
+| `service`    | service层 | 存放业务逻辑问题                                     |
+| `source`     | source层  | 存放初始化数据的函数                                   |
+| `util`       | 工具包      | 工具函数封装                                       |
 

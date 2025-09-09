@@ -1,14 +1,23 @@
-# jwt configuration
-jwt:
-  signing-key: qmPlus
-  expires-time: 7d
-  buffer-time: 1d
-  issuer: qmPlus
+# system configuration
+system:
+  env: local # 修改为public可以关闭路由日志输出
+  port: 8888
+  db-type: mysql
+  oss-type: local # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
+  use-redis: true # 使用redis
+  use-mongo: false     # 使用mongo
+  # IP限制次数 一个小时15000次
+  ip-limit-count: 15000
+  #  IP限制一个小时
+  ip-limit-time: 3600
+  #  路由全局前缀
+  router-prefix: "blog"
+
 # zap logger configuration
 zap:
-  level: info
+  level: debug
+  prefix: "[kurous-blog]"
   format: console
-  prefix: "[prefix]"
   director: log
   show-line: true
   encode-level: LowercaseColorLevelEncoder
@@ -16,30 +25,34 @@ zap:
   log-in-console: true
   retention-day: -1
 
+# mysql connect configuration
+mysql:
+  path: "127.0.0.1"
+  port: "3306"
+  username: "kurous"
+  password: "3b3xOi%ygrUwcN7D&f"
+  db-name: "myblog"
+  config: ""
+  max-idle: 10
+  max-open: 100
+  singular: true
+  log-mode: "error"
+  log-zap: true
+
 # redis configuration
 redis:
-  #是否使用redis集群模式
-  useCluster: false
   #使用集群模式addr和db默认无效
-  addr: 127.0.0.1:6379
-  password: ""
+  address: 127.0.0.1:6379
+  username: kurous
+  password: "eOeRYu2u%eR@stw%96"
   db: 0
-  clusterAddrs:
-    - "172.21.0.3:7000"
-    - "172.21.0.4:7001"
-    - "172.21.0.2:7002"
 
-# redis-list configuration
-redis-list:
-  - name: cache           # 数据库的名称,注意: name 需要在 redis-list 中唯一
-    useCluster: false     # 是否使用redis集群模式
-    addr: 127.0.0.1:6379  # 使用集群模式addr和db默认无效
-    password: ""
-    db: 0
-    clusterAddrs:
-      - "172.21.0.3:7000"
-      - "172.21.0.4:7001"
-      - "172.21.0.2:7002"
+# jwt configuration
+jwt:
+  signing-key: qmPlus
+  expires-time: 7d
+  buffer-time: 1d
+  issuer: qmPlus
 
 # mongo configuration
 mongo:
@@ -57,107 +70,6 @@ mongo:
   hosts:
     - host: ''
       port: ''
-
-# system configuration
-system:
-  env: local # 修改为public可以关闭路由日志输出
-  addr: 8888
-  db-type: mysql
-  oss-type: local # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
-  use-redis: false # 使用redis
-  use-mongo: false     # 使用mongo
-  use-multipoint: false
-  # IP限制次数 一个小时15000次
-  ip-limit-count: 15000
-  #  IP限制一个小时
-  ip-limit-time: 3600
-  #  路由全局前缀
-  router-prefix: ""
-  #  严格角色模式 打开后权限将会存在上下级关系
-  use-strict-auth: false
-
-# captcha configuration
-captcha:
-  key-long: 6
-  img-width: 240
-  img-height: 80
-  open-captcha: 0 # 0代表一直开启，大于0代表限制次数
-  open-captcha-timeout: 3600 # open-captcha大于0时才生效
-
-# mysql connect configuration
-# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
-mysql:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: ""
-  log-zap: false
-
-# pgsql connect configuration
-# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
-pgsql:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: ""
-  log-zap: false
-oracle:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: ""
-  log-zap: false
-mssql:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: ""
-  log-zap: false
-sqlite:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: ""
-  log-zap: false
-db-list:
-  - disable: true # 是否禁用
-    type: "" # 数据库的类型,目前支持mysql、pgsql、mssql、oracle
-    alias-name: "" # 数据库的名称,注意: alias-name 需要在db-list中唯一
-    path: ""
-    port: ""
-    config: ""
-    db-name: ""
-    username: ""
-    password: ""
-    max-idle-conns: 10
-    max-open-conns: 100
-    log-mode: ""
-    log-zap: false
 
 # local configuration
 local:
