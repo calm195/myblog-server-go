@@ -31,4 +31,4 @@ configs/dev/*
 configs/config-all.yaml
 configs/config-release.yaml
 
-log
+logs
