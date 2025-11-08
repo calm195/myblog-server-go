@@ -32,3 +32,4 @@ configs/config-all.yaml
 configs/config-release.yaml
 
 logs
+log
